@@ -22,7 +22,8 @@
     },
 
     "general": {
-        "lb_lengths": 20
+        "lb_lengths": 20,
+        "prof_lengths": 5
     },
 
     "socials": {

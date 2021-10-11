@@ -17,10 +17,16 @@ new Vue({
                 recent: {}
             },
 
+            page: {
+                best: 0,
+                recent: 0
+            },
+
             ui: {
                 disabled: {
                     mode: [],
-                    rx: []
+                    rx: [],
+                    load: []
                 },
 
                 dialog: {
@@ -74,7 +80,7 @@ new Vue({
         formatPerfect(perfect, miss) {
             return perfect ? "fc" :  (
                 miss == 0 ? "sb" : miss+"x"
-            )
+            );
         },
 
         async loadPlays(type) {
@@ -85,7 +91,27 @@ new Vue({
             this.profile[type] = plays;
         },
 
+        async loadMore(type) {
+            const plays = await fetch(
+                `/japi/users/scores/${type}/${this.options.mode}/${this.options.relax}/${USER_ID}?page=${++this.page[type]}`
+            ).then(o => o.json());
+
+
+            if (!plays.length) {
+                this.ui.disabled.load.push(type);
+                return;
+            }
+            
+            this.profile[type] = [...this.profile[type], ...plays];
+        },
+
         loadAll() {
+            this.ui.disabled.load.length = 0;
+
+            for (let o in this.page) {
+                this.page[o] = 0;
+            }
+
             for (let load of ["best", "recent", "most"])
                 this.loadPlays(load);
         },
@@ -101,6 +127,10 @@ new Vue({
 
         isEnabledMode(m) {
             return [...this.ui.disabled.mode, ...this.ui.disabled.rx].includes(m);
+        },
+
+        isEnabledButton(type) {
+            return this.ui.disabled.load.includes(type);
         }
     },
 

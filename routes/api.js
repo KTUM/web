@@ -185,7 +185,7 @@ router.get("/users/scores/:type/:mode/:rx/:id", async (req, res) => {
 				ON maps.md5 = scores_${rx_db}.map_md5
 
 				WHERE users.id = ${userid} AND scores_${rx_db}.mode = ${mode_db}
-				LIMIT ${page*global.conf.general.lb_lengths}, ${global.conf.general.lb_lengths}
+				LIMIT ${page*global.conf.general.prof_lengths}, ${global.conf.general.prof_lengths}
 			`); break;
 		case "best":
 			await sql.safeQuery(res, `
@@ -212,7 +212,7 @@ router.get("/users/scores/:type/:mode/:rx/:id", async (req, res) => {
 
 				WHERE users.id = ${userid} AND scores_${rx_db}.grade != "F" AND scores_${rx_db}.mode = ${mode_db}
 				ORDER BY scores_${rx_db}.pp DESC
-				LIMIT ${page*global.conf.general.lb_lengths}, ${global.conf.general.lb_lengths}
+				LIMIT ${page*global.conf.general.prof_lengths}, ${global.conf.general.prof_lengths}
 			`); break;
 		case "recent_clean": // recent scores except no failed scores.
 			await sql.safeQuery(res, `
@@ -238,7 +238,7 @@ router.get("/users/scores/:type/:mode/:rx/:id", async (req, res) => {
 				ON maps.md5 = scores_${rx_db}.map_md5
 
 				WHERE users.id = ${userid} AND scores_${rx_db}.mode = ${mode_db} AND scores_${rx_db}.grade != "F"
-				LIMIT ${page*global.conf.general.lb_lengths}, ${global.conf.general.lb_lengths}
+				LIMIT ${page*global.conf.general.prof_lengths}, ${global.conf.general.prof_lengths}
 			`); break;
 		case "most":
 			await sql.safeQuery(res, `
@@ -257,7 +257,7 @@ router.get("/users/scores/:type/:mode/:rx/:id", async (req, res) => {
 				GROUP BY map_md5
 				ORDER BY playcount DESC
 
-				LIMIT ${page*global.conf.general.lb_lengths}, ${global.conf.general.lb_lengths}
+				LIMIT ${page*global.conf.general.prof_lengths}, ${global.conf.general.prof_lengths}
 		`); break;
 	}
 

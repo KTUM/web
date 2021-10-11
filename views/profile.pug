@@ -41,20 +41,57 @@ block content
 
         div 
             h2 Best Plays
-            table(v-if="profile.best.length > 0")
-                tr(v-for="play in profile.best" @click="launchDialog(play)")
-                    td
-                        <b>{{ play.title }}</b> [{{ play.version }}]
-                        div {{ comma(play.score) }} / {{ play.max_combo }}x / { {{ play.n300+play.ngeki }}, {{ play.n100+play.nkatu }}, {{ play.n50 }}, {{ play.miss }} }
-                        span
-                            img(v-for="mod in formatMods(play.mods)" :src="mod" :key="mod")
-                        span(:title="play.play_time") {{ moment(play.play_time).fromNow() }}
-                    td
-                        h2 {{ play.grade }}
-                        h4 {{ formatPP(play.pp) }}
-                        h6 ({{ formatPerfect(play.perfect, play.nmiss) }}) ({{ play.max_combo }})
-                    
+            div(v-if="profile.best.length > 0")
+                table
+                    tr(v-for="play in profile.best" @click="launchDialog(play)")
+                        td
+                            <b>{{ play.title }}</b> [{{ play.version }}]
+                            div {{ comma(play.score) }} / {{ play.max_combo }}x / { {{ play.n300+play.ngeki }}, {{ play.n100+play.nkatu }}, {{ play.n50 }}, {{ play.miss }} }
+                            span
+                                img(v-for="mod in formatMods(play.mods)" :src="mod" :key="mod")
+                            span(:title="play.play_time") {{ moment(play.play_time).fromNow() }}
+                        td
+                            h2 {{ play.grade }}
+                            h4 {{ formatPP(play.pp) }}
+                            h6 ({{ formatPerfect(play.perfect, play.nmiss) }}) ({{ play.max_combo }})
+                button(@click="loadMore('best')" :disabled="isEnabledButton('best')") Load More
             h4(v-else) No data!
+
+        div 
+            h2 Recent Plays
+            div(v-if="profile.recent.length > 0")
+                table
+                    tr(v-for="play in profile.recent" @click="launchDialog(play)")
+                        td
+                            <b>{{ play.title }}</b> [{{ play.version }}]
+                            div {{ comma(play.score) }} / {{ play.max_combo }}x / { {{ play.n300+play.ngeki }}, {{ play.n100+play.nkatu }}, {{ play.n50 }}, {{ play.miss }} }
+                            span
+                                img(v-for="mod in formatMods(play.mods)" :src="mod" :key="mod")
+                            span(:title="play.play_time") {{ moment(play.play_time).fromNow() }}
+                        td
+                            h2 {{ play.grade }}
+                            h4 {{ formatPP(play.pp) }}
+                            h6 ({{ formatPerfect(play.perfect, play.nmiss) }}) ({{ play.max_combo }})
+                button(@click="loadMore('recent')" :disabled="isEnabledButton('recent')") Load More
+            h4(v-else) No data!
+
+        //- div 
+        //-     h2 Best Plays
+        //-     div(v-if="profile.best.length > 0")
+        //-         table
+        //-             tr(v-for="play in profile.best" @click="launchDialog(play)")
+        //-                 td
+        //-                     <b>{{ play.title }}</b> [{{ play.version }}]
+        //-                     div {{ comma(play.score) }} / {{ play.max_combo }}x / { {{ play.n300+play.ngeki }}, {{ play.n100+play.nkatu }}, {{ play.n50 }}, {{ play.miss }} }
+        //-                     span
+        //-                         img(v-for="mod in formatMods(play.mods)" :src="mod" :key="mod")
+        //-                     span(:title="play.play_time") {{ moment(play.play_time).fromNow() }}
+        //-                 td
+        //-                     h2 {{ play.grade }}
+        //-                     h4 {{ formatPP(play.pp) }}
+        //-                     h6 ({{ formatPerfect(play.perfect, play.nmiss) }}) ({{ play.max_combo }})
+        //-         button(@click="loadMore('best')" :disabled="isEnabledButton('best')") Load More
+        //-     h4(v-else) No data!
 
 block scripts
     script(src="/js/libs/moment.js")
