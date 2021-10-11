@@ -1,0 +1,55 @@
+extends ./layouts/main
+
+block content
+    h2 Player Rankings
+
+    #app
+        div
+            div 
+                button(:disabled="isEnabledMode('standard')" :class="SelectedMode('standard')" @click="ChangeMode('standard')") Standard 
+                button(:disabled="isEnabledMode('taiko')" :class="SelectedMode('taiko')" @click="ChangeMode('taiko')") Taiko 
+                button(:disabled="isEnabledMode('catch')" :class="SelectedMode('catch')" @click="ChangeMode('catch')") Catch the Beat 
+                button(:disabled="isEnabledMode('mania')" :class="SelectedMode('mania')" @click="ChangeMode('mania')") Mania
+
+            div 
+                button(:disabled="isEnabledMode('vanilla')" :class="SelectedMode('vanilla', 'relax')" @click="ChangeMode('vanilla', 'relax')") Vanilla 
+                button(:disabled="isEnabledMode('relax')" :class="SelectedMode('relax', 'relax')" @click="ChangeMode('relax', 'relax')") Relax 
+                button(:disabled="isEnabledMode('autopilot')" :class="SelectedMode('autopilot', 'relax')" @click="ChangeMode('autopilot', 'relax')") Autopilot 
+
+            div            
+                button(:class="SelectedMode('pp', 'sort')" @click="ChangeMode('pp', 'sort')") PP
+                button(:class="SelectedMode('score', 'sort')" @click="ChangeMode('score', 'sort')") Score
+
+        select(v-model="options.country")
+            - for (const country in global.countries)
+                option(value=country)= global.countries[country]
+
+        table(border=1 v-if="!ui.endReached")
+            thead
+                th Rank
+                th Country
+                th Username
+                th PP
+                th Accuracy
+                th Score
+                th Playcount
+            tbody
+                tr(v-for="(user, i) in users")
+                    td \#{{ page(i, #{global.conf.general.lb_lengths}) }}
+                    td {{ user.country }}
+                    td
+                        a(:href="`/profile/${user.id}`") {{ user.name }}
+                    td {{ comma(user.pp) }}pp
+                    td {{ user.acc }}%
+                    td(:title="`Ranked score: ${comma(user.rscore)}`") {{ comma(user.tscore) }}
+                    td {{ comma(user.plays) }}
+        div(v-else)
+            h2 No players here! Why not become the first?
+        
+        div
+            button(@click="ChangePage(-1)" :disabled="pageIsZero") Previous
+            span Page: {{ options.page+1 }}
+            button(@click="ChangePage(1)" :disabled="ui.endReached") Next
+
+block scripts
+    script(src="/js/pages/lb_user.js" defer type="module")

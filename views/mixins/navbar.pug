@@ -1,0 +1,26 @@
+mixin navbar()
+    ul.navbar
+        li
+            if user
+                a(href="/dash") Dashboard
+            else
+                a(href="/home") Home
+
+        li
+            a(href="/rankings/users") User rankings
+        li
+            a(href="/rankings/clans") Clan rankings
+        
+        
+        if !user
+            li
+                a(href="/login") Login
+            li
+                a(href="/register") Register
+        else
+            li
+                a(href=`/profile/${user.id}`) #{user.name}
+            li
+                a(href="/dash/friends") Friends
+            li
+                a(href="/logout") Logout  

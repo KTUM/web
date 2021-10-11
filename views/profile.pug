@@ -1,0 +1,48 @@
+extends ./layouts/main
+
+block content
+    h2 #{userData.name}'s Page
+    p= JSON.stringify(userData)
+
+    img(src=`https://${global.conf.urls.avatar}/${userData.id}`)
+
+    //- user general stats 
+    div
+        ul
+            li <b>Country:</b> #{userData.country}
+            li <b>Join Date:</b> #{userData.creation_time}
+            li <b>Last Seen:</b> #{userData.latest_activity}
+            li <b>Playstyle:</b> #{userData.playstyle}
+            li <b>Favorite Game:</b> #{userData.favmode}
+            li <b>Favorite Mod:</b> #{userData.favmod}
+
+    #app
+        div
+            div 
+                button(:disabled="isEnabledMode('standard')" :class="SelectedMode('standard')" @click="ChangeMode('standard')") Standard 
+                button(:disabled="isEnabledMode('taiko')" :class="SelectedMode('taiko')" @click="ChangeMode('taiko')") Taiko 
+                button(:disabled="isEnabledMode('catch')" :class="SelectedMode('catch')" @click="ChangeMode('catch')") Catch the Beat 
+                button(:disabled="isEnabledMode('mania')" :class="SelectedMode('mania')" @click="ChangeMode('mania')") Mania
+
+            div 
+                button(:disabled="isEnabledMode('vanilla')" :class="SelectedMode('vanilla', 'relax')" @click="ChangeMode('vanilla', 'relax')") Vanilla 
+                button(:disabled="isEnabledMode('relax')" :class="SelectedMode('relax', 'relax')" @click="ChangeMode('relax', 'relax')") Relax 
+                button(:disabled="isEnabledMode('autopilot')" :class="SelectedMode('autopilot', 'relax')" @click="ChangeMode('autopilot', 'relax')") Autopilot 
+
+        div 
+            h2 Best Plays
+            table(v-if="profile.best.length > 0")
+                tr(v-for="play in profile.best")
+                    td
+                        <b>{{ play.title }}</b> [{{ play.version }}]
+                        div {{ comma(play.score) }} / {{ play.max_combo }}x / { {{ play.n300+play.ngeki }}, {{ play.n100+play.nkatu }}, {{ play.n50 }}, {{ play.miss }} }
+                        span
+                            img(v-for="mod in formatMods(play.mods)" :src="mod" :key="mod")
+                        span(:title="play.play_time") {{ moment(play.play_time).fromNow() }}
+                    td
+                        
+            h4(v-else) No data!
+
+block scripts
+    script(src="/js/libs/moment.js")
+    script(src="/js/pages/profile.js" defer type="module")

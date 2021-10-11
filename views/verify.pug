@@ -1,0 +1,10 @@
+extends ./layouts/main
+
+block content
+    h2 #{user.name}, please verify your account! 
+
+    p= verifyStatus
+    p Please reload this page once you have logged in through your osu client.
+    p You will be redirected to your dashboard if the process succeeds. If it fails please contact the support Discord.
+
+    a(href=`${global.conf.socials.discord}` target="_blank") Discord invite.

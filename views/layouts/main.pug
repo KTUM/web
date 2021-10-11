@@ -1,0 +1,22 @@
+include ../mixins/navbar
+
+html(lang="en")
+    head 
+        title #{pageTitle || ""} #{pageTitle ? "|" : ""} #{global.conf.name}
+
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+        link(rel="stylesheet", href="/css/main.css")
+        block styles
+
+        script(src="/js/libs/vue.js")
+        script(src="/js/main.js" type="module")
+        block scripts
+    body
+        +navbar()
+
+        h3= global.conf.name
+
+        block content

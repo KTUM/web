@@ -1,0 +1,18 @@
+extends ./layouts/main
+
+block content
+    if messages.error 
+        p= messages.error
+
+    form(action="/login", method="post")
+        div
+            label(for="email") Email
+            input(type="text" id="email" name="email" required)
+
+        div
+            label(for="password") Password
+            input(type="password" id="password" name="password" required)
+
+        button(type="submit") Login
+
+

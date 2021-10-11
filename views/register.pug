@@ -1,0 +1,21 @@
+extends ./layouts/main
+
+block content
+    h2 Register
+    
+    form(action="/register", method="post")
+        div
+            label(for="email") Email
+            input(type="text" id="email" name="email" required)
+
+        div
+            label(for="name") Name
+            input(type="text" id="name" name="name" required)
+
+        div
+            label(for="password") Password
+            input(type="password" id="password" name="password" required)
+
+        button(type="submit") Submit
+
+

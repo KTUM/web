@@ -1,0 +1,31 @@
+{
+    "name": "web",
+    "description": "osu! private server.",
+
+    "server": {
+        "prod": "development",
+        "port": 8000,
+        "secret": "<your_secret>"
+    },
+
+    "urls": {
+        "avatar": "<a.YOURDOMAIN.tk>",
+        "frontend": "<osu.YOURDOMAIN.tk>",
+        "bmap_images": "assets.ppy.sh"
+    },
+
+    "sql": {
+        "host": "<localhost>",
+        "user": "<user>",
+        "password": "<password>",
+        "database": "<db>"
+    },
+
+    "general": {
+        "lb_lengths": 20
+    },
+
+    "socials": {
+        "discord": "<your_discord_invite>"
+    }
+}
