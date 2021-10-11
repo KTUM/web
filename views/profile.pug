@@ -17,6 +17,16 @@ block content
             li <b>Favorite Mod:</b> #{userData.favmod}
 
     #app
+        dialog(:open="ui.dialog.toggle")
+            h2 <i>#{userData.name}</i> on <i>{{ ui.dialog.play.title }}</i>
+            table
+                tbody(v-for="(value, name) in ui.dialog.play")
+                    tr(v-if="value != null")
+                        td {{ formatDialog(name) }}
+                        td {{ value }}
+
+            button(@click="closeDialog") Close
+
         div
             div 
                 button(:disabled="isEnabledMode('standard')" :class="SelectedMode('standard')" @click="ChangeMode('standard')") Standard 
@@ -32,7 +42,7 @@ block content
         div 
             h2 Best Plays
             table(v-if="profile.best.length > 0")
-                tr(v-for="play in profile.best")
+                tr(v-for="play in profile.best" @click="launchDialog(play)")
                     td
                         <b>{{ play.title }}</b> [{{ play.version }}]
                         div {{ comma(play.score) }} / {{ play.max_combo }}x / { {{ play.n300+play.ngeki }}, {{ play.n100+play.nkatu }}, {{ play.n50 }}, {{ play.miss }} }
@@ -40,7 +50,10 @@ block content
                             img(v-for="mod in formatMods(play.mods)" :src="mod" :key="mod")
                         span(:title="play.play_time") {{ moment(play.play_time).fromNow() }}
                     td
-                        
+                        h2 {{ play.grade }}
+                        h4 {{ formatPP(play.pp) }}
+                        h6 ({{ formatPerfect(play.perfect, play.nmiss) }}) ({{ play.max_combo }})
+                    
             h4(v-else) No data!
 
 block scripts

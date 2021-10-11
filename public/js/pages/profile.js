@@ -21,6 +21,11 @@ new Vue({
                 disabled: {
                     mode: [],
                     rx: []
+                },
+
+                dialog: {
+                    toggle: false,
+                    play: {}
                 }
             }
         }
@@ -33,10 +38,43 @@ new Vue({
     methods: {
         comma, moment,
 
+        launchDialog(play) {
+            this.ui.dialog.play = play;
+
+            this.ui.dialog.play["acc"] = `${this.ui.dialog.play["acc"].toString().replace(/%/g, "")}%`;
+            this.ui.dialog.play["play_time"] = moment(this.ui.dialog.play["play_time"]).format("DD/MM/YYYY")+" (DD/MM/YY)"; 
+            this.ui.dialog.play["score"] = comma(this.ui.dialog.play["score"]);
+            this.ui.dialog.play["mods"] = convertMods(this.options.mode, this.ui.dialog.play["mods"]).join(", ") || "No mods!";
+            this.ui.dialog.play["mode"] = ["Standard", "Taiko", "Catch the Beat", "Mania"][this.ui.dialog.play["mode"]];
+
+            this.ui.dialog.play["userid"] = null;
+            this.ui.dialog.play["scoreid"] = null;
+
+            this.ui.dialog.toggle = true;
+        },
+
+        closeDialog() {
+            this.ui.dialog.toggle = false;
+        },
+
+        formatDialog(name) {
+            return name.replace("_", " ");
+        },
+
         formatMods(mods) {
             return convertMods(this.options.mode, mods).map(i => 
                 `/static/mods/${i.toLowerCase()}.png`    
             );
+        },
+
+        formatPP(pp) {
+            return pp <= 0 ? "-" : Math.round(pp);
+        },
+
+        formatPerfect(perfect, miss) {
+            return perfect ? "fc" :  (
+                miss == 0 ? "sb" : miss+"x"
+            )
         },
 
         async loadPlays(type) {
@@ -54,9 +92,6 @@ new Vue({
 
         ChangeMode(num, val="mode") {
             this.options[val] = num;
-
-            console.log(num, val)
-
             this.loadAll();
         },
 
@@ -68,7 +103,6 @@ new Vue({
             return [...this.ui.disabled.mode, ...this.ui.disabled.rx].includes(m);
         }
     },
-
 
     watch: {
         "options.mode"(newval) {
